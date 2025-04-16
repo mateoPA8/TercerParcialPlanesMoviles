@@ -7,6 +7,7 @@ import com.ucb.framework.dto.AvatarResponseDto
 import com.ucb.framework.dto.LibroDto
 import com.ucb.framework.dto.MovieDto
 import com.ucb.framework.persistence.GitAccount
+import com.ucb.framework.persistence.LibroEntity
 
 fun AvatarResponseDto.toModel(): Gitalias {
     return Gitalias(
@@ -38,5 +39,21 @@ fun LibroDto.toDomain(): Libro {
         titulo = this.titulo,
         autores = this.autores ?: emptyList(),
         anioPublicacion = this.anioPublicacion ?: 0
+    )
+}
+
+fun Libro.toEntity(): LibroEntity {
+    return LibroEntity(
+        titulo = this.titulo,
+        autores = this.autores?.joinToString(",") ?: "",
+        anio = this.anioPublicacion ?: 0
+    )
+}
+
+fun LibroEntity.toModel(): Libro {
+    return Libro(
+        titulo = this.titulo,
+        autores = this.autores.split(",").map { it.trim() },
+        anioPublicacion = this.anio
     )
 }

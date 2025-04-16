@@ -10,6 +10,7 @@ import com.ucb.data.datastore.ILoginDataStore
 import com.ucb.data.git.IGitRemoteDataSource
 import com.ucb.data.git.ILocalDataSource
 import com.ucb.data.libro.ILibroRemoteDataSource
+import com.ucb.data.libro.ILocalDataSources
 import com.ucb.data.movie.IMovieRemoteDataSource
 import com.ucb.data.push.IPushDataSource
 import com.ucb.framework.github.GithubLocalDataSource
@@ -28,10 +29,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import com.ucb.framework.datastore.LoginDataSource
+import com.ucb.framework.libro.LibroLocalDataSource
 import com.ucb.framework.libro.LibroRemoteDataSource
 import com.ucb.framework.push.FirebaseNotificationDataSource
 import com.ucb.usecases.BuscarLibros
 import com.ucb.usecases.GetEmailKey
+import com.ucb.usecases.GuardarLibro
 import com.ucb.usecases.ObtainToken
 
 @Module
@@ -150,5 +153,15 @@ object AppModule {
     @Singleton
     fun provideLibroRemoteDataSource(retrofitBuilder: RetrofitBuilder): ILibroRemoteDataSource {
         return LibroRemoteDataSource(retrofitBuilder)
+    }
+    @Provides
+    @Singleton
+    fun provideLocalDataSources(@ApplicationContext context: Context): ILocalDataSources {
+        return LibroLocalDataSource(context)
+    }
+    @Provides
+    @Singleton
+    fun provideGuardarLibro(localDataSource: ILocalDataSources): GuardarLibro {
+        return GuardarLibro(localDataSource)
     }
 }

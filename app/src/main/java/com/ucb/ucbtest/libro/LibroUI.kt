@@ -8,17 +8,21 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun LibroUI(viewModel: LibroViewModel = hiltViewModel()) {
-    val state by viewModel.state.collectAsState() // Obtenemos el estado del ViewModel
-    var titulo by remember { mutableStateOf("") } // Guardamos el texto del campo de búsqueda
+    val state by viewModel.state.collectAsState()
+    var titulo by remember { mutableStateOf("") }
+
+
+    val context = LocalContext.current
 
     Column(modifier = Modifier.padding(16.dp)) {
-        // Campo de texto para ingresar el título del libro
+
         OutlinedTextField(
             value = titulo,
             onValueChange = { titulo = it },
@@ -29,11 +33,10 @@ fun LibroUI(viewModel: LibroViewModel = hiltViewModel()) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Botón para buscar el libro
         Button(
             onClick = {
                 if (titulo.isNotEmpty()) {
-                    viewModel.loadLibros(titulo) // Llamamos al método para cargar los libros
+                    viewModel.loadLibros(titulo)
                 }
             },
             modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -43,7 +46,6 @@ fun LibroUI(viewModel: LibroViewModel = hiltViewModel()) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Mostramos el estado dependiendo de lo que suceda en la API
         when (state) {
             is LibroViewModel.LibroUIState.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -59,22 +61,36 @@ fun LibroUI(viewModel: LibroViewModel = hiltViewModel()) {
                     LazyColumn {
                         items(libros) { libro ->
                             Column(modifier = Modifier.padding(8.dp)) {
-                                // Mostramos el título del libro
+
                                 Text("Título: ${libro.titulo}")
-                                // Si existen autores, los mostramos
+
                                 libro.autores?.let {
                                     Text("Autores: ${it.joinToString()}")
                                 }
-                                // Si el año de publicación está disponible, lo mostramos
+
                                 libro.anioPublicacion?.let {
                                     Text("Año de publicación: $it")
                                 }
+
+
+                                Button(
+                                    onClick = {
+                                        viewModel.guardarLibro(libro)
+                                        Toast.makeText(context, "Libro guardado", Toast.LENGTH_SHORT).show()
+                                    },
+                                    modifier = Modifier.padding(top = 8.dp)
+                                ) {
+                                    Text("Guardar libro")
+                                }
+
                                 Spacer(modifier = Modifier.height(8.dp))
                             }
                         }
                     }
                 }
             }
+
+            LibroViewModel.LibroUIState.Guardado -> TODO()
         }
     }
 }

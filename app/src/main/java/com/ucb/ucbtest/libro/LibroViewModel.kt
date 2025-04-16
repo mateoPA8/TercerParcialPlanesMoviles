@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.ucb.data.NetworkResult
 import com.ucb.domain.Libro
 import com.ucb.usecases.BuscarLibros
+import com.ucb.usecases.GuardarLibro
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,13 +15,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LibroViewModel @Inject constructor(
-    private val buscarLibros: BuscarLibros
+    private val buscarLibros: BuscarLibros,
+    private val guardarLibro: GuardarLibro
 ) : ViewModel() {
 
     sealed class LibroUIState {
         object Loading : LibroUIState()
         data class Loaded(val list: List<Libro>) : LibroUIState()
         data class Error(val message: String) : LibroUIState()
+        object Guardado : LibroUIState()
     }
 
     private val _state = MutableStateFlow<LibroUIState>(LibroUIState.Loading)
@@ -38,6 +41,12 @@ class LibroViewModel @Inject constructor(
                     _state.value = LibroUIState.Loaded(result.data)
                 }
             }
+        }
+    }
+    fun guardarLibro(libro: Libro) {
+        viewModelScope.launch {
+            val result = guardarLibro.execute(libro)
+            _state.value = LibroUIState.Guardado
         }
     }
 }
