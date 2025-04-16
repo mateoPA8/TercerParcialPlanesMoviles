@@ -8,6 +8,7 @@ import com.ucb.ucbtest.counter.CounterUI
 import com.ucb.ucbtest.counter.CounterUIV2
 import com.ucb.ucbtest.gitalias.GitaliasUI
 import com.ucb.ucbtest.home.HomeUI
+import com.ucb.ucbtest.libro.LibroUI
 import com.ucb.ucbtest.login.LoginUI
 import com.ucb.ucbtest.navigation.AppNavigation
 import com.ucb.ucbtest.takephoto.TakePhotoUI
@@ -18,11 +19,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Ucbtest)
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            AppNavigation()
+            LibroUI()
+            //TakePhotoUI()
         }
     }
 }
+
 

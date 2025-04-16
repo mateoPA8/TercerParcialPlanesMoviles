@@ -2,12 +2,14 @@ package com.ucb.ucbtest.di
 
 import android.content.Context
 import com.ucb.data.GithubRepository
+import com.ucb.data.LibroRepository
 import com.ucb.data.LoginRepository
 import com.ucb.data.MovieRepository
 import com.ucb.data.PushNotificationRepository
 import com.ucb.data.datastore.ILoginDataStore
 import com.ucb.data.git.IGitRemoteDataSource
 import com.ucb.data.git.ILocalDataSource
+import com.ucb.data.libro.ILibroRemoteDataSource
 import com.ucb.data.movie.IMovieRemoteDataSource
 import com.ucb.data.push.IPushDataSource
 import com.ucb.framework.github.GithubLocalDataSource
@@ -26,7 +28,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import com.ucb.framework.datastore.LoginDataSource
+import com.ucb.framework.libro.LibroRemoteDataSource
 import com.ucb.framework.push.FirebaseNotificationDataSource
+import com.ucb.usecases.BuscarLibros
 import com.ucb.usecases.GetEmailKey
 import com.ucb.usecases.ObtainToken
 
@@ -130,5 +134,21 @@ object AppModule {
     @Singleton
     fun provideIPushDataSource(): IPushDataSource {
         return FirebaseNotificationDataSource()
+    }
+    @Provides
+    @Singleton
+    fun provideLibroRepository(remoteDataSource: ILibroRemoteDataSource): LibroRepository {
+        return LibroRepository(remoteDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBuscarLibros(libroRepository: LibroRepository): BuscarLibros {
+        return BuscarLibros(libroRepository)
+    }
+    @Provides
+    @Singleton
+    fun provideLibroRemoteDataSource(retrofitBuilder: RetrofitBuilder): ILibroRemoteDataSource {
+        return LibroRemoteDataSource(retrofitBuilder)
     }
 }
