@@ -32,6 +32,7 @@ googleAndroidLibrariesMapsplatformSecretsGradlePlugin = "2.0.1"
 playServicesMaps = "18.1.0"
 constraintlayout = "2.1.4"
 firebaseDatabase = "21.0.0"
+uiTestAndroid = "1.7.2"
 
 
 [libraries]
@@ -96,6 +97,7 @@ firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+androidx-ui-test-android = { group = "androidx.compose.ui", name = "ui-test-android", version.ref = "uiTestAndroid" }
 
 
 [plugins]
