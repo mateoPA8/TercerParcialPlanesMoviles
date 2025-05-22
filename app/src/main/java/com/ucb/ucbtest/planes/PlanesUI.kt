@@ -33,13 +33,18 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+
 @Composable
 fun PlanesScreen(
     viewModel: PlanesViewModel = hiltViewModel()
 ) {
     val planes by viewModel.planes.collectAsState()
     val indiceActual by viewModel.indiceActual.collectAsState()
-
+    val context = LocalContext.current
     val backgroundColor = Color(0xFF0D47A1)
     val accentColor = Color.White
 
@@ -110,6 +115,12 @@ fun PlanesScreen(
                                 color = Color.Gray
                             )
                         }
+                        Button(
+                            onClick = { enviarMensajeWhatsapp(context) },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Quiero este plan")
+                        }
                     }
                 }
 
@@ -155,4 +166,12 @@ fun Caracteristica(texto: String) {
             fontSize = 14.sp
         )
     }
+}
+
+fun enviarMensajeWhatsapp(context: Context) {
+    val numero = "59170000000" // <-- Cambia esto por el número de UCB Mobile con código de país
+    val mensaje = "Hola, UCB mobile, preciso su ayuda. Lo puedes agregar por favor?"
+    val uri = Uri.parse("https://wa.me/$numero?text=${Uri.encode(mensaje)}")
+    val intent = Intent(Intent.ACTION_VIEW, uri)
+    context.startActivity(intent)
 }
