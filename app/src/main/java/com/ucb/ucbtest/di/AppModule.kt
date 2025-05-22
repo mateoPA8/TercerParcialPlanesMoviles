@@ -5,6 +5,9 @@ import com.ucb.data.GithubRepository
 import com.ucb.data.LibroRepository
 import com.ucb.data.LoginRepository
 import com.ucb.data.MovieRepository
+import com.ucb.data.PlanesRemoteDataSourceImpl
+
+import com.ucb.data.PlanesRepository
 import com.ucb.data.PushNotificationRepository
 import com.ucb.data.datastore.ILoginDataStore
 import com.ucb.data.git.IGitRemoteDataSource
@@ -12,6 +15,7 @@ import com.ucb.data.git.ILocalDataSource
 import com.ucb.data.libro.ILibroRemoteDataSource
 import com.ucb.data.libro.ILocalDataSources
 import com.ucb.data.movie.IMovieRemoteDataSource
+import com.ucb.data.plan.IPlanesRemoteDataSource
 import com.ucb.data.push.IPushDataSource
 import com.ucb.framework.github.GithubLocalDataSource
 import com.ucb.framework.github.GithubRemoteDataSource
@@ -36,6 +40,8 @@ import com.ucb.usecases.BuscarLibros
 import com.ucb.usecases.GetEmailKey
 import com.ucb.usecases.GuardarLibro
 import com.ucb.usecases.ObtainToken
+import com.ucb.usecases.ObtenerPlanes
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -163,5 +169,21 @@ object AppModule {
     @Singleton
     fun provideGuardarLibro(localDataSource: ILocalDataSources): GuardarLibro {
         return GuardarLibro(localDataSource)
+    }
+    @Provides
+    @Singleton
+    fun providePlanesRepository(remoteDataSource: IPlanesRemoteDataSource): PlanesRepository {
+        return PlanesRepository(remoteDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideObtenerPlanes(repository: PlanesRepository): ObtenerPlanes {
+        return ObtenerPlanes(repository)
+    }
+    @Provides
+    @Singleton
+    fun providePlanesRemoteDataSource(): IPlanesRemoteDataSource {
+        return PlanesRemoteDataSourceImpl()
     }
 }
