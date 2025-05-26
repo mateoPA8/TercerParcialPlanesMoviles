@@ -42,6 +42,11 @@ android {
         viewBinding = true
     }
 }
+configurations.all {
+    resolutionStrategy {
+        force ("androidx.test.espresso:espresso-core:3.5.0")
+    }
+}
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
