@@ -8,9 +8,9 @@ class PlanesRemoteDataSourceImpl : IPlanesRemoteDataSource {
     override fun obtenerPlanes(): Flow<List<Plan>> {
         return flow {
             emit(listOf(
-                Plan("Plan A", 50, 6, 70),
-                Plan("Plan B", 80, 12, 100),
-                Plan("Plan C", 100, 20, 100), // sin descuento
+                Plan("Plan FLEX 5", 199, 5, 270),
+                Plan("Plan FLEX 8", 299, 8, 370),
+                Plan("Plan FLEX 10", 399, 10, 470),
             ))
         }
     }
